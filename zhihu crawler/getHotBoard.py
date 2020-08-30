@@ -2,16 +2,17 @@ import requests
 import json
 import time
 import re
-import pandas as pd
 from bs4 import BeautifulSoup
 import MySQLdb
+import random
+
 
 # 获取当前知乎热榜
 
 # 获取当前知乎热榜
 
-def get_hot_zhihu(url, headers):
-    res = requests.get(url, headers=headers)
+def get_hot_zhihu(url, headers, proxy_ip):
+    res = requests.get(url, headers=headers, proxies=proxy_ip)
     content = BeautifulSoup(res.text, "html.parser")
     hot_data = content.find('script', id='js-initialData').string
     hot_json = json.loads(hot_data)
@@ -19,9 +20,9 @@ def get_hot_zhihu(url, headers):
     return hot_list
 
 
-def get_question_detail(question_id, headers):
+def get_question_detail(question_id, headers, proxy_ip):
     url = "https://www.zhihu.com/question/" + question_id
-    res = requests.get(url, headers=headers)
+    res = requests.get(url, headers=headers, proxies=proxy_ip)
     content = BeautifulSoup(res.text, "html.parser")
     content.html.body.div.div.main.find_all('meta')
 
@@ -44,7 +45,7 @@ def get_question_detail(question_id, headers):
     return detail
 
 
-def parse_questions(hot_list, current_time, headers):
+def parse_questions(hot_list, current_time, headers, proxy_ip):
     questions = []
 
     for q in hot_list:
@@ -58,7 +59,7 @@ def parse_questions(hot_list, current_time, headers):
         answer_id = re.search(r'https://www.zhihu.com/question/(\d*)', q['target']['link']['url']).group(1)
         question.append(answer_id)  # answer id
 
-        detail = get_question_detail(answer_id, headers)
+        detail = get_question_detail(answer_id, headers, proxy_ip)
 
         question += detail
 
@@ -86,7 +87,7 @@ def save_questions(questions):
     `questionTitle`,
     `answersNumber`,
     `hotValue`,
-    `answerId`,
+    `questionId`,
     `keywords`,
     `commentsNumber`,
     `createdTime`,
@@ -113,20 +114,29 @@ def save_questions(questions):
     conn.close()
 
 
+def random_ip():
+    with open("./ip_pools/proxies.txt", 'r') as ip_file:
+        ip_list = ip_file.read().split("\n")
+
+    r = random.randint(0, len(ip_list))
+
+    return {"http" : ip_list[r]}   # 随机抽取一个ip
 
 
-def main():
+def main(current_time):
     url = 'https://www.zhihu.com/billboard'
     headers = {"User-Agent": "'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 "
                              "(KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"}
-    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())  # 标定当前时间
-    print(current_time)
-    hot_list = get_hot_zhihu(url, headers)
-    questions = parse_questions(hot_list, current_time, headers)
+
+    # current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())  # 标定当前时间
+    # print(current_time)
+
+    proxy_ip = random_ip()
+    hot_list = get_hot_zhihu(url, headers, proxy_ip)
+    questions = parse_questions(hot_list, current_time, headers, proxy_ip)
 
     save_questions(questions)
 
 
 if __name__ == '__main__':
     main()
-
