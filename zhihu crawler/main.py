@@ -14,8 +14,16 @@ def main():
         print(e)
 
     try:
-        getAnswers(current_time)
+        getAnswers.main(current_time)
         print("answers collected")
     except Exception as e:
         print("answers error")
         print(e)
+
+
+
+
+if __name__ == '__main__':
+    while True:
+        time.sleep(1800)
+        main()

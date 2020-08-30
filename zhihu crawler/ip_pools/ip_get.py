@@ -1,72 +1,13 @@
-import requests
-import random
-from lxml import etree
-from fake_useragent import UserAgent
-
-
-# 生成随机的User-Agent
-def get_random_ua():
-    # 创建User-Agent对象
-    ua = UserAgent()
-    # 随机生成1个User-Agent
-    return ua.random
-
-# IP访问测试网站: http://httpbin.org/get
-url = 'http://httpbin.org/get'
-
-#
-# # 从西刺代理网站上获取随机的代理IP
-# def get_ip_list():
-#     headers = {'User-Agent': get_random_ua()}
-#     # 访问西刺代理网站国内高匿代理，找到所有的tr节点对象
-#     res = requests.get('https://www.xicidaili.com/nn/', headers=headers)
-#     parse_html = etree.HTML(res.text)
-#     # 基准xpath，匹配每个代理IP的节点对象列表
-#     ipobj_list = parse_html.xpath('//tr')
-#     # 定义空列表，获取网页中所有代理IP地址及端口号
-#     ip_list = []
-#     # 从列表中第2个元素开始遍历，因为第1个为: 字段名（国家、IP、... ...）
-#     for ip in ipobj_list[1:]:
-#         ip_info = ip.xpath('./td[2]/text()')[0]
-#         port_info = ip.xpath('./td[3]/text()')[0]
-#         ip_list.append(
-#             {
-#                 'http': 'http://' + ip_info + ':' + port_info,
-#                 'https': 'https://' + ip_info + ':' + port_info
-#             }
-#         )
-#     # 返回代理IP及代理池（列表ip_list）
-#     return ip_list
-
-
-# 主程序寻找测试可用代理
-def main_print():
-    # 获取抓取的所有代理IP
-    with open("./http_ip.txt",'r') as ip_file:
-        ip_list = ip_file.read().split("\n")
-
-    # print(len(ip_list))
-    # 将不能使用的代理删除
-    for proxy_ip in ip_list:
-        try:
-            # 设置超时时间，如果代理不能使用则切换下一个
-            headers = {'User-Agent': get_random_ua()}
-            res = requests.get(url=url, headers=headers, proxies=proxy_ip, timeout=10)
-            res.encoding = 'utf-8'
-            print(res.text)
-
-        except Exception as e:
-            # 此代理IP不能使用，从代理池中移除
-            ip_list.remove(proxy_ip)
-            print('%s不能用，已经移除' % proxy_ip)
-            # 继续循环获取最后1个代理IP
-            continue
-
-    # print(len(ip_list))
-    #将可用代理保存到本地文件
-    with open('proxies.txt','w') as f:
-        for ip in ip_list:
-            f.write(ip + '\n')
-
-if __name__ == '__main__':
-    main_print()
+page = 0
+question_id = 1
+url = f"""
+    https://www.zhihu.com/api/v4/questions/{question_id}/answers?include=data%5B%2A%5D.is_normal%2Cadmin_closed_comment%2\
+    Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2\
+    Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2\
+    Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2\
+    Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2C\
+    question%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2C\
+    is_nothelp%2Cis_labeled%3Bdata%5B%2A%5D.mark_infos%5B%2A%5D.url%3Bdata%5B%2A%5D.author.follower_count%2C\
+    badge%5B%2A%5D.topics&limit=5&offset={page}&platform=desktop&sort_by=default
+"""
+print(url)
