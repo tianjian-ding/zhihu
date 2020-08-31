@@ -1,5 +1,5 @@
-import getHotBoard
 import getAnswers
+import getHotBoard
 import time
 
 
