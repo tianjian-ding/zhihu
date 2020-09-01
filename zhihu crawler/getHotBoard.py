@@ -81,7 +81,7 @@ def save_questions(questions):
     )
 
     cur = conn.cursor()
-    sql = f"""INSERT INTO `zhihu`.`hotboard`
+    sql = """INSERT INTO `zhihu`.`hotboard`
     (`recordId`,
     `currentTime`,
     `questionTitle`,

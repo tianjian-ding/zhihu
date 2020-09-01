@@ -190,14 +190,16 @@ def get_answers(question_id, current_time):
     print(totals)
     print('---' * 10)
 
-    while (page < 10):
+
+    comments = []
+
+    while (page < totals):
         html = get_data(url, headers)
-        comments = parse_data(html, current_time)
-
-        save_data(comments)
-
+        comments += parse_data(html, current_time)
         print(f"\r{page}/{totals}", end="")
         page += 5
+
+    save_data(comments)
 
 def main(current_time):
     # currentTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())  # 标定当前时间

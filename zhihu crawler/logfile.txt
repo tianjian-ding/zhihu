@@ -1,0 +1,48 @@
+2020-08-31 21:12:06   hot board collected
+2020-08-31 21:12:06   answer collected
+2020-08-31 21:45:19   hot board collected
+2020-08-31 21:45:19   answer collected
+2020-08-31 22:18:17   hot board collected
+2020-08-31 22:18:17   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
+2020-08-31 22:50:00   hot board collect error: list index out of range
+2020-08-31 22:50:00   answer collected
+2020-08-31 23:20:00   hot board collected
+2020-08-31 23:20:00   answer collected
+2020-08-31 23:53:07   hot board collected
+2020-08-31 23:53:07   answer collected
+2020-09-01 00:26:05   hot board collected
+2020-09-01 00:26:05   answer collected
+2020-09-01 00:59:05   hot board collected
+2020-09-01 00:59:05   answer collected
+2020-09-01 01:32:09   hot board collected
+2020-09-01 01:32:09   answer collected
+2020-09-01 02:05:17   hot board collected
+2020-09-01 02:05:17   answer collected
+2020-09-01 02:38:26   hot board collected
+2020-09-01 02:38:26   answer collected
+2020-09-01 03:11:56   hot board collected
+2020-09-01 03:11:56   answer collected
+2020-09-01 03:44:49   hot board collected
+2020-09-01 03:44:49   answer collected
+2020-09-01 08:14:25   hot board collected
+2020-09-01 08:14:25   answer collected
+2020-09-01 08:47:21   hot board collected
+2020-09-01 08:47:21   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
+2020-09-01 09:19:15   hot board collected
+2020-09-01 09:19:15   answer collected
+2020-09-01 09:52:04   hot board collected
+2020-09-01 09:52:04   answer collected
+2020-09-01 10:24:51   hot board collected
+2020-09-01 10:24:51   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
+2020-09-01 10:56:32   hot board collected
+2020-09-01 10:56:32   answer collected
+2020-09-01 11:29:27   hot board collected
+2020-09-01 11:29:27   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
+2020-09-01 12:01:08   hot board collected
+2020-09-01 12:01:08   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
+2020-09-01 12:32:29   hot board collected
+2020-09-01 12:32:29   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
+2020-09-01 13:05:06   hot board collected
+2020-09-01 13:05:06   answer collected
+2020-09-01 13:35:20   hot board collected
+2020-09-01 13:35:20   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
