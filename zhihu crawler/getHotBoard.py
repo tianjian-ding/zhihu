@@ -52,16 +52,17 @@ def parse_questions(hot_list, current_time, headers, proxy_ip):
         question = []
 
         question.append(current_time)
-        question.append(q['target']['titleArea']['text'])  # 问题内容
+        answer_id = re.search(r'https://www.zhihu.com/question/(\d*)', \
+                              q['target']['link']['url']).group(1)  # question id
+
         question.append(str(q['feedSpecific']['answerCount']))  # 回答数
         question.append(re.search(r'\d*', q['target']['metricsArea']['text']).group(0))  # 热度 单位 万
-
-        answer_id = re.search(r'https://www.zhihu.com/question/(\d*)', q['target']['link']['url']).group(1)
-        question.append(answer_id)  # answer id
+        question.append(answer_id)    # answer id
 
         detail = get_question_detail(answer_id, headers, proxy_ip)
 
         question += detail
+        question.append(q['target']['titleArea']['text'])  # 问题内容
 
         questions.append(tuple(question))
     print("data generated")
@@ -81,13 +82,14 @@ def save_questions(questions):
     )
 
     cur = conn.cursor()
-    sql = """INSERT INTO `zhihu`.`hotboard`
+
+
+    sql_hotboard = """INSERT INTO `zhihu`.`hotboard`
     (`recordId`,
     `currentTime`,
-    `questionTitle`,
+    `questionId`,
     `answersNumber`,
     `hotValue`,
-    `questionId`,
     `keywords`,
     `commentsNumber`,
     `createdTime`,
@@ -95,12 +97,24 @@ def save_questions(questions):
     `followersNumber`,
     `visitNumber`)
     VALUES
-    (0,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
+    (0,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
     """
+
+
+    sql_questions_title = """INSERT INTO `zhihu`.`questions_title`
+    (
+    `questionId`,
+    `questionTitle`
+    )
+    VALUES
+    (0,%s,%s);
+    """
+
     try:
 
         # 执行sql语句
-        cur.executemany(sql, questions)  # 批量插入
+        cur.executemany(sql_hotboard, [i[:10] for i in questions])  # 批量插入
+        cur.executemany(sql_questions_title, [(i[1], i[10]) for i in questions])
         # 提交到数据库执行
         conn.commit()
         print("insert successful")

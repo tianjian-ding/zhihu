@@ -62,7 +62,7 @@ def parse_data(html, current_time):
             comment.append(current_time) #执行时间
             comment.append(item['id'])  # answer id
             comment.append(item['question']['id'])  # question id
-            comment.append(item['question']['title'])  # 问题题目
+            # comment.append(item['question']['title'])  # 问题题目
             comment.append(item['question']['created'])  # 创建时间
             comment.append(item['question']['updated_time'])  # 更新时间
             comment.append(item['author']['name'])  # 姓名
@@ -131,29 +131,40 @@ def save_data(comments):
     )
 
     cur = conn.cursor()
-    sql = f""" INSERT INTO
+
+    sql_answers = f""" INSERT INTO
     `zhihu`.`answers`
     (`recordId`,
      `currentTime`,
      `answerId`,
      `questionId`,
-     `questionTitle`,
      `createdTime`,
      `updateTime`,
      `authorName`,
      `authorGender`,
      `voteUpNumber`,
      `commentsNumber`,
-     `answerContent`)
+     )
         VALUES
-        (0,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
+        (0,%s,%s,%s,%s,%s,%s,%s,%s,%s);
+        """
+
+    sql_answers_content = f""" INSERT INTO
+    `zhihu`.`answers_content`
+    (
+     `answerId`,
+     `answerContent`
+     )
+        VALUES
+        (0,%s,%s);
         """
 
 
     try:
 
         # 执行sql语句
-        cur.executemany(sql, comments)  # 批量插入
+        cur.executemany(sql_answers, [i[:9] for i in comments])  # 批量插入
+        cur.executemany(sql_answers_content, [(i[1], i[9]) for i in comments])
         # 提交到数据库执行
         conn.commit()
         print("insert successful")

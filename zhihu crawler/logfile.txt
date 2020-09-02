@@ -46,3 +46,5 @@
 2020-09-01 13:05:06   answer collected
 2020-09-01 13:35:20   hot board collected
 2020-09-01 13:35:20   answer collect error: the JSON object must be str, bytes or bytearray, not NoneType
+2020-09-03 01:25:01   hot board collected
+2020-09-03 01:25:01   answer collected
